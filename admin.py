@@ -1,9 +1,9 @@
 from django.contrib import admin
-import time
-
 from .models import Schedule, Event, Location
 
-class EventAdmin(admin.ModelAdmin):
+from modeltranslation.admin import TranslationAdmin
+
+class EventAdmin(TranslationAdmin):
     list_per_page = 10000
     list_display = ('name', 'starttime', 'endtime')
 
@@ -17,6 +17,9 @@ class EventAdmin(admin.ModelAdmin):
             return obj.end_time.strftime("%A %H:%M")
 
 
+class LocationAdmin(TranslationAdmin):
+    pass
+
 admin.site.register(Schedule)
-admin.site.register(Location)
+admin.site.register(Location, LocationAdmin)
 admin.site.register(Event, EventAdmin)

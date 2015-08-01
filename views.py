@@ -35,13 +35,13 @@ def events_to_json(request, schedule_key):
     location_objects = Location.objects.filter(schedule=schedule)
     locations = {}
     for location in location_objects:
-        location_data = {'name': location.name}
-        dict_add_if_value_nonzero(location_data, 'name_fi', location.name)
+        location_data = {'name': location.name_en}
+        dict_add_if_value_nonzero(location_data, 'name_fi', location.name_fi)
         dict_add_if_value_nonzero(location_data, 'url', location.url)
         dict_add_if_value_nonzero(
-            location_data, 'description', location.description)
+            location_data, 'description', location.description_en)
         dict_add_if_value_nonzero(
-            location_data, 'description_fi', location.description)
+            location_data, 'description_fi', location.description_fi)
         locations[location.key] = location_data
     result['locations'] = locations
 
@@ -52,10 +52,10 @@ def events_to_json(request, schedule_key):
         event_key = "%s-%s" % (schedule_key, event.key)
         event_data = {
             'key': event_key,
-            'name': event.name,
+            'name': event.name_en,
             'start_time': encode_export_date(event.time, tzlocal)
             }
-        dict_add_if_value_nonzero(event_data, 'name_fi', event.name)
+        dict_add_if_value_nonzero(event_data, 'name_fi', event.name_fi)
         dict_add_if_value_nonzero(
             event_data,
             'original_start_time',
@@ -64,13 +64,13 @@ def events_to_json(request, schedule_key):
             event_data, 'end_time', encode_export_date(event.end_time, tzlocal))
         dict_add_if_value_nonzero(event_data, 'url', event.url)
         dict_add_if_value_nonzero(
-            event_data, 'description', event.description)
+            event_data, 'description', event.description_en)
         clean_json_dictionary_value(event_data, 'description')
         if event.location:
             dict_add_if_value_nonzero(
                 event_data, 'location_key', event.location.key)
         dict_add_if_value_nonzero(
-            event_data, 'description_fi', event.description)
+            event_data, 'description_fi', event.description_fi)
         clean_json_dictionary_value(event_data, 'description_fi')
         flags = []
         if event.canceled:
